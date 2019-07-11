@@ -1,6 +1,17 @@
 import requests
 import json
 
+class Maze():
+    def __init__(self, json):
+        self.map = json['map']
+        self.mazePath = json['mazePath']
+        self.startingPosition = Node(None, json['startingPosition'])
+        self.endingPosition = Node(None, json['endingPosition'])
+        print(self.map)
+
+    def solve(self):
+        return aStar(self.map, self.startingPosition, self.endingPosition)
+
 class Node():
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -93,7 +104,7 @@ def aStar(maze, start, goal):
             # coords are reversed from backtracking
             coords.reverse()
             solution = convertCoordsToDirections(coords)
-            print(solution)
+            return solution
             break
 
         # Generate children (four nearest neighbours)
@@ -117,28 +128,42 @@ def aStar(maze, start, goal):
             # add child to openSet
             openSet.append(child)
 
-def getRandomMaze():
-    url = 'https://api.noopschallenge.com/mazebot/random'
-    res = requests.get(url)
-    return res.json()['map']
+def getRandomMaze(minSize, maxSize):
+    baseURL = "https://api.noopschallenge.com"
+    path = "/mazebot/random"
+    args = ''
+    if (minSize and maxSize):
+        args = f'?minSize={minSize}&maxSize={maxSize}'
+    url = ''.join([baseURL, path, args])
+    res = requests.get(url, )
+    return res.json()
+
+def postSolution(solution, postPath):
+    baseURL = "https://api.noopschallenge.com"
+    url = ''.join([baseURL, postPath])
+    res = requests.post(url, json={"directions":solution})
+    return res.json()
 
 def main():
-
-    maze = [["X", "X", " ", " ", " ", " ", " ", " ", " ", " "],
-            ["X", " ", " ", "X", "X", "X", " ", "X", "X", " "],
-            ["X", "X", " ", "X", " ", "X", " ", "X", " ", " "],
-            [" ", " ", " ", " ", " ", "X", " ", "X", " ", "X"],
-            [" ", "X", "X", " ", "X", " ", " ", "X", " ", " "],
-            [" ", " ", " ", "X", " ", "X", " ", "X", " ", " "],
-            [" ", "X", " ", "X", " ", " ", " ", "X", " ", "X"],
-            [" ", "X", " ", "X", " ", "X", "X", "X", " ", " "],
-            [" ", "X", "X", "X", " ", " ", "A", " ", "X", " "],
-            [" ", " ", " ", "B", "X", " ", " ", "X", " ", " "]]
+    '''
+    maze = [['X', 'X', 'X', 'X', 'X', ' ', ' ', ' ', ' ', ' '],
+            ['X', ' ', ' ', 'X', ' ', ' ', 'X', ' ', 'X', ' '],
+            ['X', ' ', ' ', ' ', ' ', ' ', ' ', 'X', 'X', ' '],
+            ['X', ' ', ' ', 'X', 'X', 'X', ' ', 'X', ' ', ' '],
+            ['X', 'X', ' ', 'X', ' ', ' ', ' ', 'X', ' ', 'X'],
+            ['X', ' ', ' ', 'X', 'X', 'X', 'X', 'X', ' ', ' '],
+            ['X', 'X', ' ', 'X', ' ', 'A', ' ', 'X', ' ', 'X'],
+            ['X', ' ', ' ', 'X', 'X', 'X', ' ', 'X', ' ', ' '],
+            ['X', ' ', ' ', ' ', ' ', ' ', ' ', 'X', 'X', ' '],
+            ['X', ' ', ' ', 'X', ' ', ' ', 'X', 'B', ' ', ' ']]
     startingPosition = Node(None, [6, 8])
     endingPosition = Node(None, [3, 9])
-    aStar(maze, startingPosition, endingPosition)
-    #maze = getRandomMaze()
-    #print(maze)
+    '''
+    maze = Maze(getRandomMaze(10,20))
+    solution = maze.solve()
+    print(solution)
+    res = postSolution(solution, maze.mazePath)
+    print(res)
 
 
 if __name__ == "__main__":
