@@ -1,17 +1,26 @@
+
+# Solution
+A* Search implemented in python.
+
+## Profiling
+This [noops challenge](https://noopschallenge.com) is to a race to solve a series of mazes in a row. 
+
+I've heard how variations of A* are the preffered way to do pathfinding in video games. And thought it would be fun to try my hand at coding it.
+
+It also means that this program will likely go through many iterations as I learn to profile and optimize python.
+
+In the future I wil include a folder for profile logs including a git hash to link profiles to a specific commit.
+
+## Sample output
+```
+Found goal
+WWNNNNNNNNNNNNEEEEEEESSSSSSEENNNNNNEEEENNNEESSSSSSSSEENNEEEENNNNNNNEEEEEEEEESSSSEEEESEEEEEEEEESSSSSWWWSSESSSWSSSSSSEENNNNNEESEEEEEEEEEESEEESSSSEESSSSSWWWSWWWWWWWWWWWWWWWSSEESSSSSESSSSWWNNNWNNNWWSSSWWWWNNNWWSWWWSSWWWWSSWWWWWWWWWWWWWWNNNWWSSWWSSSWWSSSWWSSSWWSSSWWNNNNNEENNNEENNNNNNNNNNNNNNNEESSSEEEENNNNNEESSSSSEENNNNNEENEESSSEEENEENNNEEEEEESSSSWWWSSW
+{'result': 'success', 'message': 'You solved it in 0.551 seconds with 349 steps. The shortest possible solution is 323 steps.', 'shortestSolutionLength': 323, 'yourSolutionLength': 349, 'elapsed': 551}
+```
+
+# 👋 Mazebot
+
 ![Mazebot animation](https://user-images.githubusercontent.com/212941/59631813-9ad09f80-90fd-11e9-8556-810c48531558.gif)
-
-# 👋 Meet Mazebot
-For many years, Mazebot spent most of its vacation days and countless lunch breaks mapping the many forgotten cavernous subterranean floors beneath the Noops factory.
-
-Spending all that time getting lost and finding its way took its toll on Mazebot.
-
-These days, Mazebot is excited about only one thing: Challenging you to solve mazes.
-
-Are you ready to solve them?
-
-Start with the smaller mazes. Once you get the basics down, enter the Mazebot 500, a race to solve a series of mazes in a row.
-
-IF you can complete them all, you will get a certificate of your achievement.
 
 # 🤖 API
 
@@ -65,45 +74,5 @@ In race mode, mazebot will give you a series of mazes and challenge you to solve
 ###  Start the race
 
 `POST /mazebot/race { "login": "yourgithubnamehere" }`
-
-# Starter Kits
-
-## Ruby command line client
-
-You can start building a command-line solver by starting with the [the included ruby script](./mazebot.rb).
-
-The script demonstrates how to access the Mazebot API and work through the Mazebot race.
-
-Can you build a program that can complete the Mazebot 500 on its own?
-
-## HTML5 Canvas Maze Game
-
-Mazebot has also included an [HTML Game](./canvas-game) that will let you play through random mazes from the Mazebot API.
-
-Check out the [source code](./canvas-game) and show us your forks.
-
-[Play it now!](https://noopschallenge.github.io/canvas-game/index.html)
-
-![Screenshot](canvas-game/mazebot-screenshot.png?raw=true "Mazebot screenshot")
-
-Look at [the README](./canvas-game/README.md) for more information and ideas for extending the game.
-
-# ✨ A few ideas
-
-- **Create an automated solver**: Humans can be pretty good at solving mazes, but they'll never be as fast as a well-tuned computer. You could start from the [the included ruby script](./mazebot.rb) or start from scratch in another language.  If you create a solver in another language, please share it with the Noops!
-
-- **Extend the game:** Check out [the canvas game README](./canvas-game/README.md) for some ideas on how to get started.
-
-- **Create your own maze game:** Try using a tool like [Phaser](http://phaser.io/) to create your own game using the Mazebot API.
-
-- **Create your own maze API:** Try making your own API that serves random mazes and connect the canvas maze game to it.
-
-- **Create a colorful terminal client** Do you have a fondness for ASCII graphics? Create a fun client
-
-- **Generate art with the mazes**: Solving these mazes isn't the only thing you can do with them. Maybe you'd rather use these maze patterns to generate art or sound.
-
-- **Remix:** Try mixing in one of the [other Noops APIs](http://noopschallenge.com/challenges) to make something amazing.
-
-Mazebot can't wait to see what you make!
 
 More about Mazebot here: https://noopschallenge.com/challenges/mazebot
