@@ -143,6 +143,11 @@ def post(path, json):
 def postSolution(solution, postPath):
     return post(postPath, {"directions": solution})
 
+def getSampleMaze(path):
+    with open(path) as handle:
+        sampleMazeJSON = json.load(handle)
+    return sampleMazeJSON
+
 def getRandomMaze(minSize, maxSize):
     basePath = "/mazebot/random"
     args = ""
@@ -171,19 +176,26 @@ def startRace(username):
         print(res)
         nextMaze = res["nextMaze"]
 
-def main():
-
-    username = "bcowell"
-    
-    startRace(username)
-    '''
-    mazePath = "/mazebot/race/fzB5QNVVvVLwSHxh6riWcghJfJtNPGASshDfdEnkVi4"
-    maze = Maze(get(mazePath))
-    #maze = Maze(getRandomMaze(40,40))
+def doSolveRandomMaze(minSize = 60, maxSize =  60):
+    maze = Maze(getRandomMaze(minSize,maxSize))
     solution = maze.solve()
     print(solution)
     res = postSolution(solution, maze.mazePath)
     print(res)
-    '''
+
+def doRaceChallenge(username = "bcowell"):
+    startRace(username)
+
+def doSolveSampleMaze():
+    path = 'sampleMaze.json'
+    maze = Maze(getSampleMaze(path))
+    solution = maze.solve()
+    print(solution)
+
+def main():
+    #doSolveRandomMaze()
+    #doRaceChallenge()
+    doSolveSampleMaze()
+
 if __name__ == "__main__":
     main()
