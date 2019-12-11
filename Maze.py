@@ -1,7 +1,7 @@
-import requests
+from Node import Node
 import json
 
-class Maze():
+class Maze:
     def __init__(self, json):
         self.map = json["map"]
         self.mazePath = json["mazePath"]
@@ -12,40 +12,6 @@ class Maze():
 
     def solve(self):
         return aStar(self.map, self.startingPosition, self.endingPosition, self.maxX, self.maxY)
-
-class Node():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-
-        self.g = 0  # distance between the current and start node
-        self.h = 0  # estimated distance from current to end node
-        self.f = 0  # total cost of the node
-
-    def __eq__(self, compare):
-        return self.position == compare.position
-
-    def __str__(self):
-        return f"pos={self.position}, g={self.g}, h={self.h}, f={self.f}"
-
-    # Returns list of four nearest neighbour Nodes
-    def generateChildren(self, maze, maxX, maxY):
-        neighbourNodes = []
-
-        x = self.position[0]
-        y = self.position[1]
-        adj = [[x,y+1],[x,y-1],[x+1,y],[x-1,y]]
-        
-        # Remove any out-of-bounds and walls
-        for a in adj:
-            x = a[0]
-            y = a[1]
-            if x >= 0 and y >= 0 and x < maxX and y < maxY:
-                # Maze from api is a 2D array
-                # Meaning maze[0] is an array of x's at y=0
-                if maze[y][x] != 'X':
-                    neighbourNodes.append(Node(self, a))
-        return neighbourNodes
 
 def aStar(maze, start, goal, maxX, maxY):
 
@@ -127,75 +93,3 @@ def aStar(maze, start, goal, maxX, maxY):
             openSet.append(child)
 
         closedSet.append(currentNode)
-
-def get(path):
-    baseURL = "https://api.noopschallenge.com"
-    url = "".join([baseURL, path])
-    res = requests.get(url)
-    return res.json()
-
-def post(path, json):
-    baseURL = "https://api.noopschallenge.com"
-    url = "".join([baseURL, path])
-    res = requests.post(url, json=json)
-    return res.json()
-
-def postSolution(solution, postPath):
-    return post(postPath, {"directions": solution})
-
-def getSampleMaze(path):
-    with open(path) as handle:
-        sampleMazeJSON = json.load(handle)
-    return sampleMazeJSON
-
-def getRandomMaze(minSize, maxSize):
-    basePath = "/mazebot/random"
-    args = ""
-    if (minSize and maxSize):
-        args = f"?minSize={minSize}&maxSize={maxSize}"
-    path = "".join([basePath, args])
-    return get(path)
-
-def startRace(username):
-    path = "/mazebot/race/start"
-    startingMazeUrl = post(path, {"login": username})["nextMaze"]
-    maze = Maze(get(startingMazeUrl))
-
-    print(maze.mazePath)
-    solution = maze.solve()
-    print(solution)
-    res = postSolution(solution, maze.mazePath)
-    nextMaze = res["nextMaze"]
-
-    while nextMaze:
-        maze = Maze(get(nextMaze))
-        print(maze.mazePath)
-        solution = maze.solve()
-        print(solution)
-        res = postSolution(solution, maze.mazePath)
-        print(res)
-        nextMaze = res["nextMaze"]
-
-def doSolveRandomMaze(minSize = 60, maxSize =  60):
-    maze = Maze(getRandomMaze(minSize,maxSize))
-    solution = maze.solve()
-    print(solution)
-    res = postSolution(solution, maze.mazePath)
-    print(res)
-
-def doRaceChallenge(username = "bcowell"):
-    startRace(username)
-
-def doSolveSampleMaze():
-    path = 'sampleMaze.json'
-    maze = Maze(getSampleMaze(path))
-    solution = maze.solve()
-    print(solution)
-
-def main():
-    #doSolveRandomMaze()
-    #doRaceChallenge()
-    doSolveSampleMaze()
-
-if __name__ == "__main__":
-    main()
